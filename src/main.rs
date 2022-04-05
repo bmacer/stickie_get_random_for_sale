@@ -70,7 +70,6 @@ fn main() {
         if i.1.rootowner == "G9xJaAqygUMmeoTGu4tafGK9LdDbS6k54a3mLHyWydLyUA5" && i.1.collection == "9e5ba1a373b2e45818-STICKIES_OFFICIAL" {
             // println!("I own {:?}", i.1.id);
             if is_for_sale(i.1.clone()) {
-                println!("is for sale!");
                 for_sale.push(i.1.id);
             }
         }
