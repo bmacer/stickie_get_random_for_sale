@@ -1,12 +1,11 @@
-use std::env;
-use std::process;
-use std::fs::File;
+use rand::seq::SliceRandom;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Result;
 use std::collections::HashMap;
+use std::env;
+use std::fs::File;
 use std::io::prelude::*;
-use rand::seq::SliceRandom;
-
+use std::process;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Change {
@@ -31,7 +30,7 @@ struct Data {
 fn is_for_sale(nft: Nft) -> bool {
     let mut is_for_sale = false;
     for i in nft.changes {
-        if i.opType == "SEND"  {
+        if i.opType == "SEND" {
             is_for_sale = false;
         }
         if i.opType == "LIST" {
@@ -66,18 +65,35 @@ fn main() {
     let d: Data = serde_json::from_str(&contents).unwrap();
     println!("last block: {:?}", d.lastBlock);
     let mut for_sale: Vec<String> = vec![];
+    let mut for_sale_item: Vec<String> = vec![];
     for i in d.nfts {
-        if i.1.rootowner == "G9xJaAqygUMmeoTGu4tafGK9LdDbS6k54a3mLHyWydLyUA5" && i.1.collection == "9e5ba1a373b2e45818-STICKIES_OFFICIAL" {
+        if i.1.rootowner == "G9xJaAqygUMmeoTGu4tafGK9LdDbS6k54a3mLHyWydLyUA5"
+            && i.1.collection == "9e5ba1a373b2e45818-STICKIES_OFFICIAL"
+        {
             // println!("I own {:?}", i.1.id);
             if is_for_sale(i.1.clone()) {
-                for_sale.push(i.1.id);
+                for_sale.push(i.1.id.clone());
+            }
+        }
+        if i.1.rootowner == "G9xJaAqygUMmeoTGu4tafGK9LdDbS6k54a3mLHyWydLyUA5"
+            && i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_GENESIS"
+            || i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_COLLABS"
+        {
+            // println!("I own {:?}", i.1.id);
+            if is_for_sale(i.1.clone()) {
+                for_sale_item.push(i.1.id);
             }
         }
     }
+
     println!("all for sale: {:?}", for_sale);
     let mut rng = rand::thread_rng();
     let choice = for_sale.choose(&mut rng).unwrap();
+    let item_choice = for_sale_item.choose(&mut rng).unwrap();
     println!("choice: {}", choice);
+    println!("item choice: {}", item_choice);
     let mut file = File::create(ouput_path).unwrap();
     file.write_all(choice.as_bytes()).unwrap();
+    let mut item_file = File::create("item_".to_owned() + ouput_path).unwrap();
+    item_file.write_all(item_choice.as_bytes()).unwrap();
 }
