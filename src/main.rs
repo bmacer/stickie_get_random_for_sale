@@ -94,6 +94,6 @@ fn main() {
     println!("item choice: {}", item_choice);
     let mut file = File::create(ouput_path).unwrap();
     file.write_all(choice.as_bytes()).unwrap();
-    let mut item_file = File::create("item_".to_owned() + ouput_path).unwrap();
+    let mut item_file = File::create(ouput_path + ".item".to_owned()).unwrap();
     item_file.write_all(item_choice.as_bytes()).unwrap();
 }
