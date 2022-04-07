@@ -76,8 +76,8 @@ fn main() {
             }
         }
         if i.1.rootowner == "G9xJaAqygUMmeoTGu4tafGK9LdDbS6k54a3mLHyWydLyUA5"
-            && i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_GENESIS"
-            || i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_COLLABS"
+            && (i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_GENESIS"
+                || i.1.collection == "9e5ba1a373b2e45818-STICKIES_ITEMS_COLLABS")
         {
             // println!("I own {:?}", i.1.id);
             if is_for_sale(i.1.clone()) {
